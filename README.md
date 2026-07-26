@@ -1,42 +1,46 @@
+Relatório de Projeto: Contador de Produção Não-Intrusivo
 Identificação do Candidato
-Nome completo: ISRAEL BRUNO RODRIGUES DE FRANÇA
 
-GitHub: https://github.com/IsraelBruno895/processoseletivoIoT
+Nome completo: Israel Bruno Rodrigues de França
 
-Visão Geral da Solução
-Objetivo do projeto: Desenvolver um contador de produção não-intrusivo para monitoramento industrial.
+GitHub: IsraelBruno895/processoseletivoIoT
 
-O que o sistema embarcado simulado faz: Executa firmware em MicroPython utilizando um ESP32 para gerenciar sensores e comunicação serial.
+1. Visão Geral da Solução
 
-Como o usuário interage com ele: Por meio de um botão físico e leituras automatizadas em simulação via Wokwi.
+Objetivo do projeto: Criar um sistema de baixo custo para contar peças em uma linha de produção, eliminando a necessidade de anotações manuais.
 
-Arquitetura do Sistema Embarcado
-Fluxo principal do programa (main.py): Inicializa os componentes e executa um loop contínuo de escuta e monitoramento.
+O que o sistema faz: Ele atua como um "olho eletrônico" na esteira. Quando uma peça passa, ele registra; se a esteira travar, ele emite um alerta; e permite iniciar um novo turno ao toque de um botão.
 
-Estrutura de estados, loops ou temporizações: Arquitetura não-bloqueante para evitar perda de sincronia nas janelas de tempo dos testes do simulador.
+Como o usuário interage: O operador da máquina apenas acompanha os números atualizados na tela (ou sistema) e usa um botão físico para zerar a contagem quando o turno acaba.
 
-Interação entre os componentes: O microcontrolador lê sinais analógicos do sensor óptico e estados digitais do botão de controle.
+2. Arquitetura do Sistema
 
-Componentes Utilizados na Simulação (diagram.json)
-Placa ESP32 DevKit C v4 (esp): Unidade controladora central.
+Funcionamento contínuo: O programa funciona em um ciclo infinito e rápido. Ele não "trava" em nenhuma etapa, o que significa que pode ler o sensor e o botão ao mesmo tempo sem perder a contagem de nenhuma peça que passe rápido pela esteira.
 
-Sensor LDR (ldr1): Responsável pela detecção de passagem de itens na linha.
+Ação e Reação: O "cérebro" do sistema avalia constantemente a luz do ambiente. Se a luz cair drasticamente, ele entende que uma peça passou.
 
-Botão Pushbutton (btn1): Utilizado para comandos e reset do sistema.
+3. Componentes Utilizados (Simulação)
 
-Decisões Técnicas Relevantes
-Organização do código: Estrutura modular limpa e voltada para testes automatizados.
+Placa ESP32: O cérebro do projeto, responsável por processar as informações e enviar os dados.
 
-Arquitetura Não-Bloqueante: Essencial para garantir a compatibilidade com a esteira de CI/CD sem perder pulsos ou timing.
+Sensor de Luz (LDR): O "olho" que detecta a sombra das peças passando pela esteira.
 
-Casamento de Strings: Rigor absoluto nas mensagens de log serial para atender às asserções do Wokwi CI.
+Botão Físico: Uma chave de controle simples para o operador reiniciar o sistema (reset de turno).
 
-Resultados Obtidos
-Comportamento final do sistema: Inicialização correta dos módulos com mensagens exatas no console serial.
+4. Decisões Técnicas Relevantes
 
-Requisitos atendidos: Ambiente configurado via DevContainer, integração do Wokwi CLI via GitHub Secrets (WOKWI_CLI_TOKEN) e aprovação nos testes automatizados.
+Código Ágil: O sistema foi programado para não ter pausas longas (delays extensos), garantindo que responda imediatamente aos eventos da fábrica.
 
-Resultado no Wokwi: Simulações e validações concluídas com sucesso no pipeline.
+Ajuste de Sensibilidade (Luz): A lógica do sensor foi invertida e ajustada para lidar perfeitamente com variações de luz, diferenciando de forma clara uma esteira vazia de uma peça bloqueando o caminho.
 
-Comentários Adicionais
-Principais aprendizados: Aperfeiçoamento prático em automação de testes para sistemas embarcados utilizando Wokwi CLI e GitHub Actions.
+Precisão nas Mensagens: Os textos de alerta do sistema foram programados para serem exatos, facilitando a leitura por sistemas automatizados de supervisão.
+
+5. Resultados Obtidos
+
+Funcionamento Validado: O sistema contou as peças corretamente, identificou micro-paradas (esteira travada) no tempo exigido e zerou os contadores com precisão.
+
+Aprovação Automática: Todas as simulações e testes automáticos na nuvem (via GitHub Actions e Wokwi) foram concluídos e aprovados com 100% de sucesso.
+
+6. Comentários Adicionais
+
+Principais aprendizados: O projeto proporcionou uma excelente experiência prática sobre como unir o desenvolvimento de hardware com testes automáticos de software. Ficou claro como ajustar o comportamento de componentes físicos (como o ruído de um botão ou a sensibilidade da luz) para que funcionem perfeitamente dentro de ambientes rigorosos de validação.

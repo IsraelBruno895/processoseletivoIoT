@@ -40,13 +40,11 @@ while True:
             print(f"Peca detectada! Total: {contador_pecas}")
             estado_anterior_bloqueado = False
 
-    # Leitura e debounce do botão otimizados para o Wokwi CI
+    # Leitura do botão com tratamento direto para evitar travamento de timeout
     leitura_atual = btn.value()
-    
     if leitura_atual != ultimo_estado_btn:
-        if time.ticks_diff(current_time, ultimo_tempo_debounce) > 20:
+        if time.ticks_diff(current_time, ultimo_tempo_debounce) > 30:
             ultimo_tempo_debounce = current_time
-            # Detecta transição de solto (1) para pressionado (0)
             if ultimo_estado_btn == 1 and leitura_atual == 0:
                 contador_pecas = 0
                 print("Turno resetado com sucesso. Contadores zerados.")

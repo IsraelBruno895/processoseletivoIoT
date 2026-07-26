@@ -23,7 +23,7 @@ while True:
     
     lux_val = ldr.read() 
 
-    bloqueado = (lux_val < 100)
+    bloqueado = (lux_val < 500)
     
     if bloqueado:
         if not estado_anterior_bloqueado:
@@ -31,7 +31,7 @@ while True:
             tempo_bloqueio_inicio = current_time
             micro_parada_registrada = False
         else:
-            if not micro_parada_registrada and (time.ticks_diff(current_time, tempo_bloqueio_inicio) > 5000):
+            if not micro_parada_registrada and (time.ticks_diff(current_time, tempo_bloqueio_inicio) > 4000):
                 print("Alerta: Micro-parada detectada!")
                 micro_parada_registrada = True
     else:
@@ -40,7 +40,6 @@ while True:
             print(f"Peca detectada! Total: {contador_pecas}")
             estado_anterior_bloqueado = False
 
-    # Leitura do botão com tratamento direto para evitar travamento de timeout
     leitura_atual = btn.value()
     if leitura_atual != ultimo_estado_btn:
         if time.ticks_diff(current_time, ultimo_tempo_debounce) > 30:

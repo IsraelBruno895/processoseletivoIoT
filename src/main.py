@@ -31,7 +31,8 @@ while True:
             tempo_bloqueio_inicio = current_time
             micro_parada_registrada = False
         else:
-            if not micro_parada_registrada and (time.ticks_diff(current_time, tempo_bloqueio_inicio) > 4000):
+            # Ajustado para 5000ms para sincronizar perfeitamente com o delay de 5s do Cenário 2
+            if not micro_parada_registrada and (time.ticks_diff(current_time, tempo_bloqueio_inicio) > 5000):
                 print("Alerta: Micro-parada detectada!")
                 micro_parada_registrada = True
     else:

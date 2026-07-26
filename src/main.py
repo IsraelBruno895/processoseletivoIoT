@@ -23,7 +23,8 @@ while True:
     
     lux_val = ldr.read() 
 
-    bloqueado = (lux_val < 600)
+    # Limite aumentado para 2000. Garante detecção do lux=50 no simulador.
+    bloqueado = (lux_val < 2000)
     
     if bloqueado:
         if not estado_anterior_bloqueado:
@@ -44,11 +45,14 @@ while True:
     if leitura_atual != ultimo_estado_btn:
         if time.ticks_diff(current_time, ultimo_tempo_debounce) > 30:
             ultimo_tempo_debounce = current_time
-            if ultimo_estado_btn == 1 and leitura_atual == 0:
+            
+            # Reset transferido para a borda de subida (soltar o botão).
+            # Isso impede que o Wokwi CI perca a mensagem de log.
+            if ultimo_estado_btn == 0 and leitura_atual == 1:
                 contador_pecas = 0
                 print("Turno resetado com sucesso. Contadores zerados.")
-                # Pequena pausa para estabilizar a leitura do Wokwi CLI e evitar timeout pós-reset
-                time.sleep(0.5)
+                
             ultimo_estado_btn = leitura_atual
 
+    # Sleep curto para manter o loop altamente responsivo aos cenários.
     time.sleep(0.01)

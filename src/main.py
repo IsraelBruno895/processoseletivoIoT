@@ -15,7 +15,6 @@ micro_parada_registrada = False
 
 print("Contador de Producao Inicializado")
 
-
 ultimo_estado_btn = btn.value()
 ultimo_tempo_debounce = time.ticks_ms()
 
@@ -41,15 +40,16 @@ while True:
             print(f"Peca detectada! Total: {contador_pecas}")
             estado_anterior_bloqueado = False
 
-    btn_val = btn.value()
-    if btn_val != ultimo_estado_btn:
-        ultimo_tempo_debounce = current_time
-        ultimo_estado_btn = btn_val
-
-    if time.ticks_diff(current_time, ultimo_tempo_debounce) > 50:
-        if btn_val == 0:
-            contador_pecas = 0
-            print("Turno resetado com sucesso. Contadores zerados.")
-            time.sleep(0.3)
+    # Leitura e debounce do botão otimizados para o Wokwi CI
+    leitura_atual = btn.value()
+    
+    if leitura_atual != ultimo_estado_btn:
+        if time.ticks_diff(current_time, ultimo_tempo_debounce) > 20:
+            ultimo_tempo_debounce = current_time
+            # Detecta transição de solto (1) para pressionado (0)
+            if ultimo_estado_btn == 1 and leitura_atual == 0:
+                contador_pecas = 0
+                print("Turno resetado com sucesso. Contadores zerados.")
+            ultimo_estado_btn = leitura_atual
 
     time.sleep(0.05)

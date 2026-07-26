@@ -23,7 +23,7 @@ while True:
     
     lux_val = ldr.read() 
 
-    bloqueado = (lux_val < 500)
+    bloqueado = (lux_val < 600)
     
     if bloqueado:
         if not estado_anterior_bloqueado:
@@ -31,7 +31,6 @@ while True:
             tempo_bloqueio_inicio = current_time
             micro_parada_registrada = False
         else:
-            # Ajustado para 5000ms para sincronizar perfeitamente com o delay de 5s do Cenário 2
             if not micro_parada_registrada and (time.ticks_diff(current_time, tempo_bloqueio_inicio) > 5000):
                 print("Alerta: Micro-parada detectada!")
                 micro_parada_registrada = True
@@ -48,6 +47,8 @@ while True:
             if ultimo_estado_btn == 1 and leitura_atual == 0:
                 contador_pecas = 0
                 print("Turno resetado com sucesso. Contadores zerados.")
+                # Pequena pausa para estabilizar a leitura do Wokwi CLI e evitar timeout pós-reset
+                time.sleep(0.5)
             ultimo_estado_btn = leitura_atual
 
-    time.sleep(0.05)
+    time.sleep(0.01)

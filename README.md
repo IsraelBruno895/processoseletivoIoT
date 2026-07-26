@@ -1,7 +1,7 @@
 Identificação do Candidato
-Nome completo: Israel Bruno
+Nome completo: ISRAEL BRUNO RODRIGUES DE FRANÇA
 
-GitHub: IsraelBruno895
+GitHub: https://github.com/IsraelBruno895/processoseletivoIoT
 
 Visão Geral da Solução
 Objetivo do projeto: Desenvolver um contador de produção não-intrusivo para monitoramento industrial.
